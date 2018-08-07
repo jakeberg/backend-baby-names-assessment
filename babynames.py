@@ -8,6 +8,7 @@
 
 import sys
 import re
+import codecs
 
 """Baby Names exercise
 
@@ -40,8 +41,26 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+  year = filename[4:8]
+  html = codecs.open(filename, "r")
+  babynames_list = []
+  names_used = []
+
+  for line in html.readlines():
+      # print line
+      year = re.search(r'Popularity\sin\s(\d\d\d\d)', line)
+      match = re.search("<td>(.*)</td><td>(.*)</td><td>(.*)</td>", line)
+      if year:
+          year_name = year.group()[14:18]
+          babynames_list.append(year_name)
+      if match:
+          name = match.group(2)
+          number = match.group(1)
+          if name not in names_used:
+              babynames_list.append(name + " " + number)
+              names_used.append(name)
+  babynames_list.sort()
+  return '\n'.join(babynames_list) + '\n'
 
 
 def main():
@@ -58,11 +77,17 @@ def main():
   summary = False
   if args[0] == '--summaryfile':
     summary = True
+    r = extract_names(args[1])
+    yr =  r[0:4]
+    txt = open("result" + yr + ".txt", 'w+')
+    txt.write(r)
     del args[0]
 
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+# def names_summary(f):
+
   
 if __name__ == '__main__':
-  main()
+    main()
