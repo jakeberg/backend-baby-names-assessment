@@ -79,9 +79,11 @@ def main():
     summary = True
     r = extract_names(args[1])
     yr =  r[0:4]
-    txt = open("result" + yr + ".txt", 'w+')
+    txt = open( yr + ".html.summary", 'w+')
     txt.write(r)
     del args[0]
+  else:
+    print "Try again"
 
   # +++your code here+++
   # For each filename, get the names, then either print the text output
